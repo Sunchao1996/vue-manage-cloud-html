@@ -3,70 +3,70 @@ import Layout from '@/views/layout/Layout'
 const resourcesMap = {
   path: '/sys',
   component: Layout,
-  meta: {title: 'sysManage', icon: 'peoples', noCache: true, permissionName: 'Sys'},
+  meta: {title: 'sysManage', icon: 'peoples', noCache: true,role: ['sys']},
   children: [
     {
       path: 'resources/index',
       name: 'Resources',
       component: () => import('@/views/resources/index'),
       //permissionName为该资源的代码，如果不需要进行权限控制则为空或者不设置meta
-      meta: {title: 'resources', icon: 'edit', noCache: true, permissionName: 'Resources'}
+      meta: {title: 'resources', icon: 'edit', noCache: true, role: ['resources']}
     },
     {
       hidden: true,
       path: 'resources/add',
       component: () => import('@/views/resources/components/add'),
       name: 'ResourcesAdd',
-      meta: {permissionName: 'ResourcesAdd', title: 'resourcesAdd'}
+      meta: {role: ['resourcesadd'], title: 'resourcesAdd'}
     },
     {
       hidden: true,
       path: 'resources/update',
       component: () => import('@/views/resources/components/update'),
       name: 'ResourcesUpdate',
-      meta: {permissionName: 'ResourcesUpdate', title: 'resourcesUpdate'}
+      meta: {role: ['resourcesupdate'], title: 'resourcesUpdate'}
     },
     {
       path: 'users/index',
       name: 'Users',
       component: () => import('@/views/users/index'),
       //permissionName为该资源的代码，如果不需要进行权限控制则为空或者不设置meta
-      meta: {title: 'users', icon: 'user', noCache: true, permissionName: 'Users'}
+      meta: {title: 'users', icon: 'user', noCache: true,role: ['users']}
     },
     {
       path: 'roles/index',
       name: 'Roles',
       component: () => import('@/views/roles/index'),
       //permissionName为该资源的代码，如果不需要进行权限控制则为空或者不设置meta
-      meta: {title: 'roles', icon: 'role', noCache: true, permissionName: 'Roles'}
+      meta: {title: 'roles', icon: 'role', noCache: true, role: ['roles']}
     },
     {
       hidden: true,
       path: 'roles/add',
       component: () => import('@/views/roles/components/add'),
       name: 'RolesAdd',
-      meta: {permissionName: 'RolesAdd', title: 'rolesAdd'}
+      meta: { role: ['rolesadd'], title: 'rolesAdd'}
     },
     {
       hidden: true,
       path: 'users/add',
       component: () => import('@/views/users/components/add'),
       name: 'UsersAdd',
-      meta: {permissionName: 'UsersAdd', title: 'usersAdd'}
+      meta: {role: ['usersadd'], title: 'usersAdd'}
     },
     {
       hidden: true,
       path: 'roles/update',
       component: () => import('@/views/roles/components/update'),
       name: 'RolesUpdate',
-      meta: {permissionName: 'RolesUpdate', title: 'rolesUpdate'}
+      meta: {role: ['rolesupdate'], title: 'rolesUpdate'}
     },
     {
       hidden: true,
       path: 'users/update',
       component: () => import('@/views/users/components/update'),
       name: 'UsersUpdate',
-      meta: {permissionName: 'UsersUpdate', title: 'usersUpdate'}
+      meta: {role: ['usersupdate'], title: 'usersUpdate'}
     },
     {
       hidden: true,

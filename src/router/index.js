@@ -69,7 +69,7 @@ export const constantRouterMap = [
         name: 'Dashboard',
         component: () => import('@/views/dashboard/index'),
         //permissionName为该资源的代码，如果不需要进行权限控制则为空或者不设置meta
-        meta: {title: 'dashboard', icon: 'dashboard', noCache: true, permissionName: ''}
+        meta: {title: 'dashboard', icon: 'dashboard', noCache: true, role: []}
       }
     ]
   }

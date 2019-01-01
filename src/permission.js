@@ -8,8 +8,8 @@ import {getToken} from '@/utils/auth' // getToken from cookie
 NProgress.configure({showSpinner: false});// NProgress Configuration
 
 // permission judge function
-function hasPermission(rolesResources, route) {
-  if (rolesResources.roles.indexOf('admin') >= 0) return true; // admin permission passed directly
+function hasPermission(roles, route) {
+  // if (roles.indexOf('admin') >= 0) return true; // admin permission passed directly
   if (route.name === undefined) {
     return true;
   } else {
@@ -21,7 +21,17 @@ function hasPermission(rolesResources, route) {
       }
       return false;
     }else{
-      return rolesResources.resources.indexOf(route.meta.permissionName) > -1;
+      console.log(route);
+      if(route.meta.role ===undefined ||route.meta.role.length===0){
+        return true;
+      }
+      let flag= false;
+      route.meta.role.forEach(role=>{
+        if(roles.indexOf(role)>-1){
+          flag = true;
+        }
+      });
+      return flag;
     }
   }
 }
@@ -39,9 +49,9 @@ router.beforeEach((to, from, next) => {
     } else {
       if (store.getters.roles.length === 0) { // 判断当前用户是否已拉取完user_info信息
         store.dispatch('GetUserInfo').then(res => { // 拉取user_info
-          const resources = res.data.resources + ''; // note: roles must be a array! such as: ['editor','develop']
-          const roles = res.data.roles;
-          store.dispatch('GenerateRoutes', {roles: roles, resources: resources}).then(() => { // 根据roles权限生成可访问的路由表
+          console.log(res.data);
+          const roles = res.data.roles; // note: roles must be a array! such as: ['editor','develop']
+          store.dispatch('GenerateRoutes', {roles: roles}).then(() => { // 根据roles权限生成可访问的路由表
             router.addRoutes(store.getters.addRouters); // 动态添加可访问路由表
             next({...to, replace: true}) // hack方法 确保addRoutes已完成 ,set the replace: true so the navigation will not leave a history record
           })
@@ -52,13 +62,9 @@ router.beforeEach((to, from, next) => {
           })
         })
       } else {
-        console.log("userinfo now");
-        console.log(to);
         // 没有动态改变权限的需求可直接next() 删除下方权限判断 ↓
         const roles = store.getters.roles;
-        const resources = store.getters.resources;
-
-        if (hasPermission({roles, resources}, to)) {
+        if (hasPermission(roles, to)) {
           next()
         } else {
           next({path: '/401', replace: true, query: {noGoBack: true}})

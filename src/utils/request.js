@@ -1,13 +1,13 @@
 import axios from 'axios'
-import {Message} from 'element-ui'
+import { Message } from 'element-ui'
 import store from '@/store'
-import {getToken} from '@/utils/auth'
-import router from  '@/router'
+import { getToken } from '@/utils/auth'
+import router from '@/router'
 
 // create an axios instance
 const service = axios.create({
   // baseURL: process.env.BASE_API, // api 的 base_url
-  baseURL: 'http://localhost:8080', // api 的 base_url
+  baseURL: 'http://localhost:8010', // api 的 base_url
   timeout: 500000 // request timeout
 });
 
@@ -17,7 +17,8 @@ service.interceptors.request.use(
     // Do something before request is sent
     if (store.getters.token) {
       // 让每个请求携带token-- ['X-Token']为自定义key 请根据实际情况自行修改
-      config.headers['X-Token'] = getToken()
+      config.headers['Authorization'] = 'Bearer ' + getToken();
+      config.authentication
     }
     return config
   },
@@ -41,7 +42,7 @@ service.interceptors.response.use(
     const res = response.data;
     console.log(res);
     if (res.success !== true) {
-      console.log("res");
+      console.log('res');
       Message({
         message: res.msg,
         type: 'error',
@@ -116,8 +117,8 @@ service.interceptors.response.use(
       type: 'error',
       duration: 5 * 1000
     });
-    if(err.response.status===401){
-      router.push({path: '/401', replace: true, query: {noGoBack: true}});
+    if (err.response.status === 401) {
+      router.push({ path: '/401', replace: true, query: { noGoBack: true }});
     }
     return Promise.reject('err');
   }
