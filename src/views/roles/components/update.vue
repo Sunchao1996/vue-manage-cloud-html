@@ -15,17 +15,6 @@
               <el-radio v-model="formData.roleStatus" :label="1">禁用</el-radio>
             </el-col>
           </el-form-item>
-          <el-form-item label="角色资源">
-            <el-tree
-              :data="resourcesList"
-              show-checkbox :check-strictly="true"
-              node-key="id"
-              :default-expanded-keys="formData.checkResourcesIds"
-              :default-checked-keys="formData.checkResourcesIds"
-              :props="treeDefaultProps"
-              @check="checkResource">
-            </el-tree>
-          </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="submitForm">立即更新</el-button>
             <el-button @click="goBack">返回</el-button>
@@ -61,7 +50,6 @@
         }
       };
       return {
-        chooseResourceParent: false,
         labelPosition: 'right',
         getInfoF: true,
         formData: {
@@ -80,24 +68,15 @@
             {required: true, message: '角色代码不能为空!'},
             {validator: validRoleCode, trigger: 'blur'}
           ]
-        },
-        resourcesList: [],
-        treeDefaultProps: {
-          label: 'resourceName',
-          children: 'children'
         }
       }
     },
     watch: {},
     created() {
-      resourcesList().then((res) => {
-        this.resourcesList = res.data;
-      });
       const id = this.$route.params.id;
       getRole(id).then((res) => {
         this.formData = Object.assign({}, this.formData, res.data);
         this.formData.oldRoleCode = this.formData.roleCode;
-        this.formData.checkResourcesIds = res.data.resourcesIds.split('@');
       }).catch(error => {
         Message({
           type: 'error',
@@ -114,9 +93,9 @@
       submitForm() {
         console.log("submit");
         this.$refs['roleUpdateForm'].validate((valid) => {
-          console.log(valid);
           if (valid && this.getInfoF) {
             this.formData.resourcesIds = this.formData.checkResourcesIds.join('@');
+            this.formData = Object.assign({},this.formData,{roletType:1})
             updateRole(this.formData).then(() => {
               this.$router.replace({name: 'Roles'});
             }).catch(error => {
@@ -125,10 +104,6 @@
           } else {
           }
         });
-      },
-      checkResource(data, c) {
-        this.formData.checkResourcesIds = c.checkedKeys;
-        console.log(this.formData.checkResourcesIds);
       }
     }
   }

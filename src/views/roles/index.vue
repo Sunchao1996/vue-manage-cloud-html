@@ -20,7 +20,21 @@
 
             >
             </el-table-column>
+            <el-table-column align="center"
+                             prop="roleCode"
+                             label="代码"
 
+            >
+            </el-table-column>
+            <el-table-column align="center"
+                             prop="roleStatus"
+                             label="状态"
+            >
+              <template slot-scope="scope">
+                <el-tag v-if="scope.row.roleStatus===0" type="success">正常</el-tag>
+                <el-tag v-else type="danger">禁用</el-tag>
+              </template>
+            </el-table-column>
             <el-table-column align="center" label="操作">
               <template slot-scope="scope">
                 <el-button
@@ -57,6 +71,7 @@
     created() {
       rolesList().then((res) => {
         this.$store.dispatch('delRegexView', '/sys/roles');
+        console.log(res.data);
         this.tableData = res.data;
       })
     },

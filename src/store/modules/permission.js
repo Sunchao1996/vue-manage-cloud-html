@@ -30,7 +30,7 @@ function filterAsyncRouter(routes, roles) {
     const tmp = {...route};
     if (hasPermission(roles, tmp)) {
       if (tmp.children) {
-        tmp.children = filterAsyncRouter(tmp.children, roles)
+         filterAsyncRouter(tmp.children, roles)
       }
       res.push(tmp)
     }

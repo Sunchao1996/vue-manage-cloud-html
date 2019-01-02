@@ -2,7 +2,7 @@ import request from '@/utils/request';
 
 export function rolesList(data) {
   return request({
-    url: '/sys/roles/list',
+    url: '/sys/roles/list/1',
     method: 'get',
     params: data
   });
@@ -10,7 +10,7 @@ export function rolesList(data) {
 
 export function addRole(data) {
   return request({
-    url: '/sys/roles/add',
+    url: '/sys/roles',
     method: 'post',
     data
   });
@@ -18,38 +18,29 @@ export function addRole(data) {
 
 export function checkRoleCode(roleCode) {
   return request({
-    url: '/sys/roles/checkRoleCode',
-    method: 'post',
-    data: {
-      'roleCode': roleCode
-    }
+    url: '/sys/roles/code/'+roleCode,
+    method: 'get'
   });
 }
 
 export function delRole(roleId) {
   return request({
-    url: '/sys/roles/delete',
-    method: 'post',
-    data: {
-      'roleId': roleId
-    }
+    url: '/sys/roles/'+roleId,
+    method: 'delete'
   });
 }
 
 export function getRole(roleId) {
   return request({
-    url: '/sys/roles/get',
-    method: 'post',
-    data: {
-      'roleId': roleId
-    }
+    url: '/sys/roles/'+roleId,
+    method: 'get'
   });
 }
 
 export function updateRole(data) {
   return request({
-    url: '/sys/roles/update',
-    method: 'post',
+    url: '/sys/roles',
+    method: 'put',
     data
   });
 }

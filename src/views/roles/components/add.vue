@@ -15,15 +15,6 @@
               <el-radio v-model="formData.roleStatus" :label="1">禁用</el-radio>
             </el-col>
           </el-form-item>
-          <el-form-item label="角色资源">
-            <el-tree
-              :data="resourcesList"
-              show-checkbox :check-strictly="true"
-              node-key="id"
-              :props="treeDefaultProps"
-              @check="checkResource">
-            </el-tree>
-          </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="submitForm">立即创建</el-button>
             <el-button @click="goBack">返回</el-button>
@@ -55,14 +46,12 @@
         });
       };
       return {
-        chooseResourceParent: false,
         labelPosition: 'right',
         formData: {
           roleName: '',
           roleCode: '',
           roleStatus: 0,
-          resourcesIds: '',
-          checkResourcesIds: []
+          roleType:1
         },
         formRules: {
           roleName: [
@@ -73,7 +62,6 @@
             {validator: validRoleCode, trigger: 'blur'}
           ]
         },
-        resourcesList: [],
         treeDefaultProps: {
           label: 'resourceName',
           children: 'children'
@@ -81,11 +69,6 @@
       }
     },
     watch: {},
-    created() {
-      resourcesList().then((res) => {
-        this.resourcesList = res.data;
-      });
-    },
     methods: {
       goBack: function () {
         this.$router.go(-1);
@@ -93,7 +76,6 @@
       submitForm() {
         this.$refs['roleAddForm'].validate((valid) => {
           if (valid) {
-            this.formData.resourcesIds = this.formData.checkResourcesIds.join('@');
             addRole(this.formData).then(() => {
               this.$router.replace({name: 'Roles'});
             }).catch(error => {
@@ -101,10 +83,6 @@
             });
           }
         });
-      },
-      checkResource(data, c) {
-        this.formData.checkResourcesIds = c.checkedKeys;
-        console.log(this.formData.checkResourcesIds);
       }
     }
   }

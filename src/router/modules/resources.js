@@ -3,29 +3,8 @@ import Layout from '@/views/layout/Layout'
 const resourcesMap = {
   path: '/sys',
   component: Layout,
-  meta: {title: 'sysManage', icon: 'peoples', noCache: true,role: ['sys']},
+  meta: {title: 'sysManage', icon: 'peoples', noCache: true,role: []},
   children: [
-    {
-      path: 'resources/index',
-      name: 'Resources',
-      component: () => import('@/views/resources/index'),
-      //permissionName为该资源的代码，如果不需要进行权限控制则为空或者不设置meta
-      meta: {title: 'resources', icon: 'edit', noCache: true, role: ['resources']}
-    },
-    {
-      hidden: true,
-      path: 'resources/add',
-      component: () => import('@/views/resources/components/add'),
-      name: 'ResourcesAdd',
-      meta: {role: ['resourcesadd'], title: 'resourcesAdd'}
-    },
-    {
-      hidden: true,
-      path: 'resources/update',
-      component: () => import('@/views/resources/components/update'),
-      name: 'ResourcesUpdate',
-      meta: {role: ['resourcesupdate'], title: 'resourcesUpdate'}
-    },
     {
       path: 'users/index',
       name: 'Users',
