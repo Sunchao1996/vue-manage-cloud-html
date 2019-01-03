@@ -7,7 +7,13 @@ export function rolesList(data) {
     params: data
   });
 }
-
+export function groupRolesList(data) {
+  return request({
+    url: '/sys/roles/list/2',
+    method: 'get',
+    params: data
+  });
+}
 export function addRole(data) {
   return request({
     url: '/sys/roles',

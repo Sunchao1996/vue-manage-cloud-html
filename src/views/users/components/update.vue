@@ -60,7 +60,7 @@
 
 <script>
   import {checkUserName, getUserById, updateUser} from '@/api/users';
-  import {rolesList} from '@/api/roles';
+  import {groupRolesList} from '@/api/roles';
   import {Message} from 'element-ui';
   import myUpload from 'vue-image-crop-upload';
   import PanThumb from '@/components/PanThumb'
@@ -120,7 +120,7 @@
     watch: {},
     created() {
       //获取角色列表
-      rolesList({}).then((res) => {
+      groupRolesList({}).then((res) => {
         this.formSubmit = true;
         for (let i of res.data) {
           this.userRolesAllId.push({
@@ -131,6 +131,7 @@
         //获取用户
         const userId = this.$route.params.id;
         getUserById(userId).then((res) => {
+          console.log("getUserById",res.data);
           this.formSubmit = true;
           this.formData = Object.assign({}, this.formData, res.data);
           this.formData.imgDataUrl = this.formData.userAvatar;

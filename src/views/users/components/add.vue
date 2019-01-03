@@ -60,7 +60,7 @@
 
 <script>
   import {addRole, checkUserName, saveUser} from '@/api/users';
-  import {rolesList} from '@/api/roles';
+  import {groupRolesList} from '@/api/roles';
   import {Message} from 'element-ui';
   import myUpload from 'vue-image-crop-upload';
   import PanThumb from '@/components/PanThumb'
@@ -112,7 +112,7 @@
     },
     watch: {},
     created() {
-      rolesList({}).then((res) => {
+      groupRolesList({}).then((res) => {
         this.formSubmit = true;
         for (let i of res.data) {
           this.userRolesAllId.push({

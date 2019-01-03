@@ -23,6 +23,11 @@
       <el-col :span="5">状态:
         <el-select v-model="searchData.userStatus" placeholder="请选择" :style="{width:160+'px'}">
           <el-option
+            :key="-1"
+            label="全部"
+            value="">
+          </el-option>
+          <el-option
             :key="0"
             label="正常"
             :value="0">
@@ -88,7 +93,7 @@
                 </el-switch>
               </template>
             </el-table-column>
-            <el-table-column align="center" label="密码" v-if="$store.getters.roles.indexOf('admin') > -1">
+            <el-table-column align="center" label="密码" v-if="$store.getters.roles.indexOf('usersupdate') > -1">
               <template slot-scope="scope">
                 <el-button
                   type="danger"
