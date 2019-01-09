@@ -81,8 +81,9 @@ export default new Router({
   routes: constantRouterMap
 })
 import resourcesMap from './modules/resources';
-
+import wxMap from './modules/wx/wx';
 export const asyncRouterMap = [
   resourcesMap,
+  wxMap,
   {path: '*', redirect: '/404', hidden: true}
 ];

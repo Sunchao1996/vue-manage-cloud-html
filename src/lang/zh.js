@@ -13,7 +13,13 @@ export default {
     rolesUpdate: '更新资源',
     usersAdd: '新增用户',
     usersUpdate: '更新用户',
-    usersUpdatePwd: '修改密码'
+    usersUpdatePwd: '修改密码',
+    groupRole:'角色组管理',
+    groupRoleAdd:'增加角色组',
+    groupRoleUpdate:'修改角色组',
+    wxManage:'微信管理',
+    foodTabManage:'标签管理',
+    foodsManage:'食物管理'
   },
   navbar: {
     logOut: '退出登录',

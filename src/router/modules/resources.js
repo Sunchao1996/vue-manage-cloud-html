@@ -3,14 +3,14 @@ import Layout from '@/views/layout/Layout'
 const resourcesMap = {
   path: '/sys',
   component: Layout,
-  meta: {title: 'sysManage', icon: 'peoples', noCache: true,role: []},
+  meta: {title: 'sysManage', icon: 'peoples', noCache: true},
   children: [
     {
       path: 'users/index',
       name: 'Users',
       component: () => import('@/views/users/index'),
       //permissionName为该资源的代码，如果不需要进行权限控制则为空或者不设置meta
-      meta: {title: 'users', icon: 'user', noCache: true,role: ['users']}
+      meta: {title: 'users', icon: 'user', noCache: true, role: ['users']}
     },
     {
       path: 'roles/index',
@@ -24,7 +24,7 @@ const resourcesMap = {
       path: 'roles/add',
       component: () => import('@/views/roles/components/add'),
       name: 'RolesAdd',
-      meta: { role: ['rolesadd'], title: 'rolesAdd'}
+      meta: {role: ['rolesadd'], title: 'rolesAdd'}
     },
     {
       hidden: true,
@@ -53,6 +53,26 @@ const resourcesMap = {
       component: () => import('@/views/users/components/updatePwd'),
       name: 'UsersUpdatePwd',
       meta: {title: 'usersUpdatePwd'}
+    },
+    {
+      path: 'grouprole/index',
+      component: () => import('@/views/grouprole/index'),
+      name: 'GroupRole',
+      meta: {title: 'groupRole', icon: 'peoples', role: ['grouprole']}
+    },
+    {
+      hidden: true,
+      path: 'grouprole/add',
+      component: () => import('@/views/grouprole/components/add'),
+      name: 'GroupRoleAdd',
+      meta: {title: 'groupRoleAdd', role: ['grouproleadd']}
+    },
+    {
+      hidden: true,
+      path: 'grouprole/update',
+      component: () => import('@/views/grouprole/components/update'),
+      name: 'GroupRoleUpdate',
+      meta: {title: 'groupRoleUpdate', role: ['grouproleupdate']}
     }
   ]
 };

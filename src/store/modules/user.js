@@ -16,10 +16,18 @@ const user = {
     },
     resources: '',
     roleName: [],
-    userRealName: ''
+    userRealName: '',
+    groupRoles:[],
+    groupRolesName:[]
   },
 
   mutations: {
+    SET_GROUP_ROLES: (state, groupRoles) => {
+      state.groupRoles = groupRoles
+    },
+    SET_GROUP_ROLES_NAME: (state, groupRolesName) => {
+      state.groupRolesName = groupRolesName
+    },
     SET_CODE: (state, code) => {
       state.code = code
     },
@@ -92,6 +100,9 @@ const user = {
           commit('SET_INTRODUCTION', data.introduction);
           commit('SET_USERREALNAME', data.userRealName);
           commit('SET_ROLENAME', data.roleName);
+          commit('SET_GROUP_ROLES',data.groupRoles);
+          console.log(data.groupRolesName);
+          commit('SET_GROUP_ROLES_NAME',data.groupRolesName.split('@'));
           resolve(response)
         }).catch(error => {
           reject(error)

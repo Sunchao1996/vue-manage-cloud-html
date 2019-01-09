@@ -1,8 +1,8 @@
 <template>
   <div class="dashboard-editor-container">
     <div class=" clearfix">
-      <pan-thumb :image="avatar" style="float: left"> 拥有角色:
-        <span v-for="item in roleName" :key="item" class="pan-info-roles">{{ item }}</span>
+      <pan-thumb :image="avatar" style="float: left"> 所属角色组:
+        <span v-for="item in groupRolesName" :key="item" class="pan-info-roles">{{ item }}</span>
       </pan-thumb>
       <div class="info-container">
         <span class="display_name">{{ userRealName }}</span>
@@ -31,7 +31,7 @@
     components: {PanThumb},
     data() {
       return {
-        roleName: [],
+        groupRolesName: [],
         emptyGif: 'https://wpimg.wallstcn.com/0e03b7da-db9e-4819-ba10-9016ddfdaed3'
       }
     },
@@ -44,9 +44,7 @@
       ])
     },
     created: function () {
-      let roleNameTemp = this.$store.getters.roleName;
-      roleNameTemp = roleNameTemp.substring(0, roleNameTemp.length - 1);
-      this.roleName = roleNameTemp.split('@');
+      this.groupRolesName = this.$store.getters.groupRolesName;
     }
   }
 </script>
