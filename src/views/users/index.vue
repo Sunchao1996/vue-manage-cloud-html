@@ -164,8 +164,6 @@
       })
     },
     methods: {
-      searchTable: function () {
-      },
       tableRowClassName({row, rowIndex}) {
         if (rowIndex === 1) {
           return 'warning-row';

@@ -19,7 +19,10 @@ export default {
     groupRoleUpdate:'修改角色组',
     wxManage:'微信管理',
     foodTabManage:'标签管理',
-    foodsManage:'食物管理'
+    foodTabAdd:'新增标签',
+    foodTabUpdate:'修改标签',
+    foodsManage:'食物管理',
+    foodsAdd:'食物添加'
   },
   navbar: {
     logOut: '退出登录',

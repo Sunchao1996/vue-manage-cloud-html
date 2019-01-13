@@ -42,7 +42,7 @@ service.interceptors.response.use(
     const res = response.data;
     console.log(res);
     if (res.success !== true) {
-      console.log('res');
+      console.log('response');
       Message({
         message: res.msg,
         type: 'error',
