@@ -22,7 +22,8 @@ export default {
     foodTabAdd:'新增标签',
     foodTabUpdate:'修改标签',
     foodsManage:'食物管理',
-    foodsAdd:'食物添加'
+    foodsAdd:'食物添加',
+    foodsUpdate:'食物修改'
   },
   navbar: {
     logOut: '退出登录',

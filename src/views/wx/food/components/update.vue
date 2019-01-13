@@ -1,52 +1,57 @@
 <template>
   <div class="app-container">
     <el-row>
-      <el-col :offset="5" :span="14">
-        <el-form ref="userUpdateForm" :label-position="labelPosition" label-width="100px" :model="formData">
-          <el-form-item label="用户名" prop="userName" :rules="formRules.userName">
-            <el-input v-model="formData.userName" :disabled="true"></el-input>
+      <el-col :offset="5" :span="8">
+        <el-form ref="foodsUpdateForm" :label-position="labelPosition" label-width="100px" :model="formData">
+          <el-form-item label="名称" prop="foodName" :rules="formRules.foodName">
+            <el-input v-model="formData.foodName"></el-input>
           </el-form-item>
-          <el-form-item label="真实姓名" prop="userRealName" :rules="formRules.userRealName">
-            <el-input v-model="formData.userRealName"></el-input>
-          </el-form-item>
-          <el-form-item label="是否启用">
-            <el-col :span="20">
-              <el-radio v-model="formData.userStatus" :label="0">启用</el-radio>
-              <el-radio v-model="formData.userStatus" :label="1">禁用</el-radio>
+          <el-form-item label="状态" prop="foodStatus">
+            <el-col>
+              <el-radio v-model="formData.foodStatus" :label="0">启用</el-radio>
+              <el-radio v-model="formData.foodStatus" :label="1">禁用</el-radio>
             </el-col>
           </el-form-item>
-          <el-form-item label="手机号">
-            <el-input v-model="formData.userMobile"></el-input>
+          <el-form-item label="顺序" :rules="formRules.foodOrder" prop="foodOrder">
+            <el-input v-model="formData.foodOrder" type="number"></el-input>
           </el-form-item>
-          <el-form-item label="头像">
-            <el-col :span="3">
-              <el-button type="primary" @click="chooseAvatar">选择</el-button>
+          <el-form-item label="标签" prop="foodTab" :rules="formRules.foodTab">
+            <el-col>
+              <el-select :style="{width:100+'%'}" v-model="formData.foodTab" placeholder="请选择">
+                <el-option
+                  v-for="item in foodTabs"
+                  :key="item.id"
+                  :label="item.tabName"
+                  :value="item.id">
+                  <span style="float: left">{{ item.tabName }}</span>
+                </el-option>
+              </el-select>
             </el-col>
-            <el-col :offset="1" :span="4">
-              <pan-thumb :image="formData.imgDataUrl" :width="60+'px'" :height="60+'px'"/>
-            </el-col>
-            <my-upload field="img"
-                       @crop-success="cropSuccess"
-                       v-model="avatarComponentShow"
-                       :width="200"
-                       :height="200"
-                       img-format="png"></my-upload>
           </el-form-item>
-          <el-form-item label="简介">
-            <el-input v-model="formData.userIntroduction"></el-input>
+          <el-form-item label="价格" :rules="formRules.foodPrice" prop="foodPrice">
+            <el-input v-model="formData.foodPrice"></el-input>
           </el-form-item>
-          <el-form-item label="用户角色">
-            <el-transfer
-              style="text-align: left; display: inline-block"
-              filterable
-              v-model="checkRolesId"
-              :titles="['未选中角色', '选中角色']"
-              :button-texts="['移除', '添加']"
-              :format="{noChecked:'${total}',hasChecked:'${checked}/${total}'}"
-              @change="roleChanage"
-              :data="userRolesAllId"
-            >
-            </el-transfer>
+          <el-form-item label="数量" :rules="formRules.foodNum" prop="foodNum">
+            <el-input v-model="formData.foodNum" type="number"></el-input>
+          </el-form-item>
+          <el-form-item label="图片">
+            <el-upload ref="imgUpload"
+                       class="upload-demo"
+                       action="#"
+                       :show-file-list="true"
+                       :multiple="false"
+                       :before-upload="beforeHandler"
+                       :on-remove="removeHandler"
+                       :limit="1"
+                       :file-list="foodImgList"
+                       :on-success="successHandler"
+                       :on-error="errorHandler"
+                       :http-request="uploadHandler"
+                       :on-exceed="exceedHandler"
+                       list-type="picture">
+              <el-button size="medium" type="primary">点击上传</el-button>
+              <div slot="tip" class="el-upload__tip">只能上传jpg/png文件，且不超过500kb</div>
+            </el-upload>
           </el-form-item>
           <el-form-item>
             <el-button type="primary" @click="submitForm">立即更新</el-button>
@@ -59,123 +64,103 @@
 </template>
 
 <script>
-  import {checkUserName, getUserById, updateUser} from '@/api/users';
-  import {groupRolesList} from '@/api/roles';
+  import {addFood,getFood,updateFood} from '@/api/wx/food';
+  import {foodTabAll} from '@/api/wx/foodtab';
   import {Message} from 'element-ui';
-  import myUpload from 'vue-image-crop-upload';
-  import PanThumb from '@/components/PanThumb'
 
   export default {
-    name: "UsersUpdate",
-    components: {
-      'my-upload': myUpload,
-      PanThumb
-    },
+    name: "FoodsAdd",
     data() {
-      const vm = this;
-      const validUserName = (rule, value, callback) => {
-        if (vm.oldUserName !== undefined && value !== vm.oldUserName) {
-          checkUserName(value).then(res => {
-            if (res.data === false) {
-              callback(new Error('用户名已经存在'));
-            } else {
-              callback();
-            }
-          }).catch(e => {
-            callback(new Error('校验失败~'))
-          });
-        } else {
-          callback();
-        }
-      };
       return {
-        oldUserName: '',
+        foodImgList:[],
+        foodTabs: [],
         formSubmit: true,
-        avatarComponentShow: false,
         labelPosition: 'right',
-        checkRolesId: [],
-        userRolesAllId: [],
         formData: {
-          id: '',
-          userName: '',
-          userMobile: '',
-          userStatus: 0,
-          userRealName: '',
-          userAvatar: '',
-          roles: '',
-          userIntroduction: '',
-          imgDataUrl: ''
+          id:'',
+          foodName: '',
+          foodStatus: 0,
+          foodOrder: 1,
+          foodTab: null,
+          foodImg: '',
+          foodPrice: '',
+          foodNum: 999999
         },
         formRules: {
-          userName: [
-            {required: true, message: '用户名不能为空!'},
-            {validator: validUserName, trigger: 'blur'}
+          foodName: [
+            {required: true, message: '名称不能为空!'},
           ],
-          userRealName: [
-            {required: true, message: '姓名不能为空!'}
-          ]
+          foodOrder: [
+            {required: true, message: '顺序不能为空!'},
+          ],
+          foodTab: [
+            {required: true, message: '所属标签不能为空!'},
+          ],
+          foodPrice: [
+            {required: true, message: '价格不能为空!'},
+          ],
+          foodNum: [
+            {required: true, message: '数量不能为空!'},
+          ],
         }
       }
     },
     watch: {},
     created() {
-      //获取角色列表
-      groupRolesList({}).then((res) => {
-        this.formSubmit = true;
-        for (let i of res.data) {
-          this.userRolesAllId.push({
-            key: '' + i.id,
-            label: i.roleName
-          })
-        }
-        //获取用户
-        const userId = this.$route.params.id;
-        getUserById(userId).then((res) => {
-          console.log("getUserById",res.data);
-          this.formSubmit = true;
-          this.formData = Object.assign({}, this.formData, res.data);
-          this.formData.imgDataUrl = this.formData.userAvatar;
-          this.oldUserName = this.formData.userName;
-          //获取拥有的角色id
-          this.checkRolesId = this.formData.roles.split('@');
-        }).catch(() => {
-          this.formSubmit = false;
-        });
-      }).catch(() => {
+      //获取用户
+      const foodId = this.$route.params.id;
+      foodTabAll().then(res => {
+        this.foodTabs = res.data;
+      }).catch(err => {
         this.formSubmit = false;
-        Message({
-          message: '获取角色列表失败',
-          type: 'error',
-          duration: 5000
-        });
       });
-
+      getFood(foodId).then(res=>{
+        this.formData = Object.assign({},res.data);
+        this.foodImgList.push({name:res.data.foodName,url:res.data.foodImg})
+      });
     },
     methods: {
-      cropSuccess: function (imgDataUrl, field) {
-        this.formData.userAvatar = imgDataUrl;
-        this.formData.imgDataUrl = imgDataUrl;
+      exceedHandler(files,fileList){
+        Message({
+          message: '请先清除原照片后继续上传',
+          type: 'error',
+          duration: 3000
+        });
       },
-      chooseAvatar: function () {
-        this.avatarComponentShow = true;
+      uploadHandler(event){
+        // console.log( this.$refs.imgUpload);
+        this.$refs.imgUpload.handleSuccess(null,event.file);
       },
-      goBack: function () {
+      successHandler(response, file, fileList){
+        console.log(file);
+        let reader = new FileReader();
+         reader.readAsDataURL(file.raw);;
+         reader.onload = e=>{
+           this.formData.foodImg = reader.result;
+         };
+      },
+      errorHandler(err, file, fileList){
+        console.log("err");
+      },
+      removeHandler(file, fileList){
+        console.log("remove");
+      },
+      beforeHandler(file) {
+        console.log("beforeHandler");
+        return true;
+      },
+      goBack() {
         this.$router.go(-1);
       },
       submitForm() {
-        this.$refs['userUpdateForm'].validate((valid) => {
+        this.$refs['foodsUpdateForm'].validate((valid) => {
           if (valid && this.formSubmit) {
-            updateUser(this.formData).then(() => {
-              this.$router.replace({name: 'Users'});
-            }).catch(() => {
-              console.log('修改用户失败');
-            });
+            updateFood(this.formData).then((res) => {
+              this.$router.replace({name: 'Foods'});
+            })
           }
         });
       },
-      roleChanage(cur, lr, key) {
-        this.formData.roles = this.checkRolesId.join("@");
-      }
     }
   }
 </script>

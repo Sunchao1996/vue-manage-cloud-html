@@ -104,11 +104,11 @@
             </el-table-column>
             <el-table-column align="center" label="操作">
               <template slot-scope="scope">
-                <!--<el-button-->
-                <!--size="mini"-->
-                <!--@click.native="updateUser(scope.row.id)"-->
-                <!--&gt;修改-->
-                <!--</el-button>-->
+                <el-button
+                  size="mini"
+                  @click.native="updateFood(scope.row.id)"
+                >修改
+                </el-button>
                 <el-button
                   size="mini"
                   type="danger"
@@ -161,7 +161,7 @@
     },
     created() {
       listFood().then((res) => {
-        this.$store.dispatch('delRegexView', '/wx/food');
+        this.$store.dispatch('delRegexView', '/wx/foods');
         this.tableData = res.data.data;
         this.searchData.total = res.data.total;
         this.searchData.pageIndex = res.data.pageIndex;
@@ -244,6 +244,11 @@
             message: '已取消删除'
           });
         });
+      },
+      updateFood(recordId) {
+        const route = this.$route;
+        this.$router.push({name: 'FoodsUpdate', params: {id: recordId}});
+        this.$store.dispatch('delView', route);
       }
 
     }

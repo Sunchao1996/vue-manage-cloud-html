@@ -16,7 +16,21 @@ export function addFood(data){
     data
   });
 }
+//根据id获取数据
+export function getFood(id){
+  return request({
+    method:'get',
+    url:'/wxfood/food/'+id
+  })
+}
 //修改食物
+export function updateFood(data){
+  return request({
+    method:'put',
+    url:'/wxfood/food/',
+    data
+  });
+}
 //删除食物
 export function delFood(id){
   return request({
